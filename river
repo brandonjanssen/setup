@@ -1,0 +1,100 @@
+Jump to content
+Toggle sidebar
+Alpine Linux
+Search Alpine Linux
+Create account
+Log in
+Contents hide
+Beginning
+Installation
+Running River
+Notes
+River
+Page
+Discussion
+Read
+View source
+View history
+River is a dynamic tiling Wayland compositor. An introduction to River can be found in this blog post by the developer for the 0.1.0 release.
+
+This wiki was written starting from a fresh install using the Alpine 3.14.2 x86_64 extended .iso. The steps begin from the first reboot after running setup-alpine and performing a sys install to disk.
+
+Many steps below were taken from the wiki entry for installing Sway.
+
+Installation
+Login as root.
+
+Edit the repositories file and uncomment the community and testing repos. For 3.14.2, we need edge/community to get the correct software versions to support River:
+
+Contents of /etc/apk/repositories
+
+#http://dl-cdn.alpinelinux.org/alpine/v3.17/main
+#http://dl-cdn.alpinelinux.org/alpine/v3.17/community
+http://dl-cdn.alpinelinux.org/alpine/edge/main
+http://dl-cdn.alpinelinux.org/alpine/edge/community
+http://dl-cdn.alpinelinux.org/alpine/edge/testing
+Setting up eudev on a desktop system is recommended:
+
+# setup-devd udev
+
+For more details and advanced instructions see Device Manager.
+
+Then install the mesa gallium drivers:
+
+# apk add mesa-dri-gallium
+
+The following links contain guides for setting up the video stack.
+
+Intel Video
+Radeon Video
+Install River and the documentation:
+
+# apk add river river-doc
+
+river-doc is required if you want use the example config.
+
+Install your choice of additional packages:
+
+This list includes icons, fonts, and a terminal emulator named foot which is the default in River's sample init file that we will use later.
+
+# apk add adwaita-icon-theme foot font-dejavu
+
+Set seatd to start automatically at next boot and also manually start it for this session:
+
+# rc-update add seatd
+# rc-service seatd start
+
+Create a new user and update group membership:
+
+# adduser $USER seat
+# adduser $USER input
+# adduser $USER video
+
+Logout and log back in as the new user.
+
+Running River
+Before running River for the first time, copy the sample init file to ~/.config:
+
+install -Dm0755 /usr/share/doc/river/examples/init -t ~/.config/river
+
+Set XDG_RUNTIME_DIR and then start River:
+
+river
+
+Notes
+Following are a few notes that are most certainly not related to River whatsoever but rather discovered while running River so I'm tacking them onto the end of this wiki.
+
+Firefox 89.0.1 complains on launch "glxtest: libpci missing", resolved by:
+
+apk add pciutils-libs
+
+Firefox 89.0.1 complains continuously "Unable to load hand2 from the cursor theme", resolved by:
+
+mkdir -p ~/.icons/default
+ln -s /usr/share/icons/Adwaita/cursors .icons/default/cursors
+
+Categories: DesktopWayland
+This page was last edited on 6 November 2023, at 23:22.
+© Copyright 2008-2021 Alpine Linux Development Team all rights reserved
+
+Privacy policyAboutDisclaimersPowered by MediaWikiToggle limited content width
